@@ -44,3 +44,16 @@ func (c *LitmusClient) CreateProject(projectName string) (*entities.Project, err
 		ProjectName: projectName,
 	})
 }
+
+func (c *LitmusClient) UpdateProjectName(projectId string, projectName string) (*entities.Project, error) {
+	_, err := litmusPost[map[string]interface{}](c.httpClient, "/auth/update_project_name", entities.UpdateProjectNameInput{
+		ProjectID:   projectId,
+		ProjectName: projectName,
+	})
+
+	if err != nil {
+		return nil, fmt.Errorf("failed to update project name: %v", err)
+	}
+
+	return c.GetProjectById(projectId)
+}

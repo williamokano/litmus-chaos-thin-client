@@ -11,3 +11,8 @@ type Project struct {
 type CreateProjectInput struct {
 	ProjectName string `json:"projectName"`
 }
+
+type UpdateProjectNameInput struct {
+	ProjectID   string `json:"projectID"`
+	ProjectName string `json:"projectName"`
+}
