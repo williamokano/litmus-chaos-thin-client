@@ -37,3 +37,23 @@ func (c *LitmusClient) ListEnvironments(projectId string, request graphql.ListEn
 
 	return query.ListEnvironments.Environments, nil
 }
+
+func (c *LitmusClient) CreateEnvironment(projectId string, request graphql.CreateEnvironmentRequest) (*entities.Environment, error) {
+	// Check if ID is provided, otherwise fallback to default implementation
+	if request.EnvironmentID == "" {
+		request.EnvironmentID = request.IDFromName()
+	}
+
+	mutation := graphql.CreateEnvironmentMutation{}
+	args := map[string]interface{}{
+		"projectID": *hasuragraphql.NewID(projectId),
+		"request":   request,
+	}
+	err := c.graphqlClient.Mutate(c.ctx, &mutation, args)
+
+	if err != nil {
+		return nil, fmt.Errorf("failed to create environment on project ID %s: %w", projectId, err)
+	}
+
+	return &mutation.CreateEnvironment.Environment, nil
+}

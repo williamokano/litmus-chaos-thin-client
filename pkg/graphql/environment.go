@@ -1,6 +1,10 @@
 package graphql
 
-import "github.com/williamokano/litmus-chaos-thin-client/pkg/entities"
+import (
+	"strings"
+
+	"github.com/williamokano/litmus-chaos-thin-client/pkg/entities"
+)
 
 type EnvironmentSortingField string
 
@@ -15,6 +19,11 @@ type CreateEnvironmentRequest struct {
 	Type          entities.EnvironmentType `graphql:"type" json:"type"`
 	Description   string                   `graphql:"description" json:"description"`
 	Tags          []string                 `graphql:"tags" json:"tags"`
+}
+
+// IDFromName tries to mimic the Control Plane UI behaviour
+func (r CreateEnvironmentRequest) IDFromName() string {
+	return strings.NewReplacer("-", "", "_", "", " ", "_").Replace(r.Name)
 }
 
 type UpdateEnvironmentRequest struct {
