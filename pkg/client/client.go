@@ -135,7 +135,7 @@ func NewClientFromCredentials(host string, credentials LitmusCredentials) (*Litm
 	if err != nil {
 		return nil, fmt.Errorf("failed to parse base url: %v", err)
 	}
-
+	ctx := context.Background()
 	client := &LitmusClient{
 		credentials: credentials,
 		baseUrl:     baseUrl,
@@ -145,6 +145,8 @@ func NewClientFromCredentials(host string, credentials LitmusCredentials) (*Litm
 				token:   credentials.Token,
 			},
 		},
+		graphqlClient: newGraphqlClient(ctx, host, credentials.Token),
+		ctx:           ctx,
 	}
 
 	return client, nil
