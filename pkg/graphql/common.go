@@ -1,6 +1,6 @@
 package graphql
 
 type Pagination struct {
-	Page  int `json:"page"`
-	Limit int `json:"limit"`
+	Page  int `graphql:"page" json:"page"`
+	Limit int `graphql:"limit" json:"limit"`
 }

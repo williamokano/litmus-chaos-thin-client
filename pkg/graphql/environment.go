@@ -10,46 +10,46 @@ var (
 )
 
 type CreateEnvironmentRequest struct {
-	EnvironmentID string                   `json:"environmentID"`
-	Name          string                   `json:"name"`
-	Type          entities.EnvironmentType `json:"type"`
-	Description   string                   `json:"description"`
-	Tags          []string                 `json:"tags"`
+	EnvironmentID string                   `graphql:"environmentID" json:"environmentID"`
+	Name          string                   `graphql:"name" json:"name"`
+	Type          entities.EnvironmentType `graphql:"type" json:"type"`
+	Description   string                   `graphql:"description" json:"description"`
+	Tags          []string                 `graphql:"tags" json:"tags"`
 }
 
 type UpdateEnvironmentRequest struct {
-	EnvironmentID string                   `json:"environmentID"`
-	Name          string                   `json:"name"`
-	Type          entities.EnvironmentType `json:"type"`
-	Description   string                   `json:"description"`
-	Tags          []string                 `json:"tags"`
+	EnvironmentID string                   `graphql:"environmentID" json:"environmentID"`
+	Name          string                   `graphql:"name" json:"name"`
+	Type          entities.EnvironmentType `graphql:"type" json:"type"`
+	Description   string                   `graphql:"description" json:"description"`
+	Tags          []string                 `graphql:"tags" json:"tags"`
 }
 
 type EnvironmentFilterInput struct {
-	Name        string                     `json:"name"`
-	Description string                     `json:"description"`
-	Type        string                     `json:"type"`
-	Tags        []entities.EnvironmentType `json:"tags"`
+	Name        string                     `graphql:"name" json:"name"`
+	Description string                     `graphql:"description" json:"description"`
+	Type        string                     `graphql:"type" json:"type"`
+	Tags        []entities.EnvironmentType `graphql:"tags" json:"tags"`
 	// Yes I know above types looks wrong, but they are wrongly defined
 	// on their graphql schema.
 	// please check this issue on their GH https://github.com/litmuschaos/litmus/issues/4354
 }
 
 type EnvironmentSortInput struct {
-	Field     EnvironmentSortingField `json:"field"`
-	Ascending bool                    `json:"ascending"`
+	Field     EnvironmentSortingField `graphql:"field" json:"field"`
+	Ascending bool                    `graphql:"ascending" json:"ascending"`
 }
 
 type ListEnvironmentRequest struct {
-	EnvironmentIDs []string                `json:"environmentIDs"`
-	Pagination     *Pagination             `json:"pagination"`
-	Filter         *EnvironmentFilterInput `json:"filter"`
-	Sort           *EnvironmentSortInput   `json:"sort"`
+	EnvironmentIDs []string                `graphql:"environmentIDs" json:"environmentIDs"`
+	Pagination     *Pagination             `graphql:"pagination" json:"pagination"`
+	Filter         *EnvironmentFilterInput `graphql:"filter" json:"filter"`
+	Sort           *EnvironmentSortInput   `graphql:"sort" json:"sort"`
 }
 
 type ListEnvironmentResponse struct {
-	TotalNoOfEnvironments int                     `json:"totalNoOfEnvironments"`
-	Environments          []*entities.Environment `json:"environments"`
+	TotalNoOfEnvironments int                     `graphql:"totalNoOfEnvironments" json:"totalNoOfEnvironments"`
+	Environments          []*entities.Environment `graphql:"environments" json:"environments"`
 }
 
 type GetEnvironmentQuery struct {
