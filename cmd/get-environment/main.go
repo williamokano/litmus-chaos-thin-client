@@ -1,10 +1,11 @@
 package main
 
 import (
+	"encoding/json"
 	"flag"
-	"fmt"
 	"os"
 
+	"github.com/williamokano/litmus-chaos-thin-client/internal/utils"
 	"github.com/williamokano/litmus-chaos-thin-client/pkg/client"
 )
 
@@ -16,12 +17,17 @@ type GetProjectInput struct {
 }
 
 func main() {
+	// Create input with some defaults
 	input := GetProjectInput{}
+
 	flag.StringVar(&input.host, "host", "", "Host")
-	flag.StringVar(&input.projectId, "projectId", "", "ProjectID")
-	flag.StringVar(&input.environmentId, "environmentId", "", "EnvironmentID")
+	flag.StringVar(&input.projectId, "projectID", "", "ProjectID")
+	flag.StringVar(&input.environmentId, "environmentID", "", "EnvironmentID")
 	flag.StringVar(&input.token, "token", "", "Token")
 	flag.Parse()
+
+	input.host = utils.StringCoalesce(input.host, os.Getenv("LITMUS_CHAOS_HOST"))
+	input.token = utils.StringCoalesce(input.token, os.Getenv("LITMUS_CHAOS_TOKEN"))
 
 	litmusClient, err := client.NewClientFromCredentials(input.host, client.LitmusCredentials{
 		Token: input.token,
@@ -31,6 +37,5 @@ func main() {
 	}
 
 	res, err := litmusClient.GetEnvironmentByID(input.projectId, input.environmentId)
-
-	_, _ = fmt.Fprintf(os.Stdout, "%+v", res)
+	_ = json.NewEncoder(os.Stdout).Encode(res)
 }
