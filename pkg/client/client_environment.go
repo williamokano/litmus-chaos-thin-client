@@ -72,3 +72,18 @@ func (c *LitmusClient) UpdateEnvironment(projectId string, request graphql.Updat
 
 	return mutation.UpdateEnvironment, nil
 }
+
+func (c *LitmusClient) DeleteEnvironment(projectId string, environmentId string) (string, error) {
+	mutation := graphql.DeleteEnvironmentMutation{}
+	args := map[string]interface{}{
+		"projectID":     *hasuragraphql.NewID(projectId),
+		"environmentID": *hasuragraphql.NewID(environmentId),
+	}
+	err := c.graphqlClient.Mutate(c.ctx, &mutation, args)
+
+	if err != nil {
+		return "", fmt.Errorf("failed to delete environment ID %s on project ID %s: %w", environmentId, projectId, err)
+	}
+
+	return mutation.DeleteEnvironment, nil
+}
