@@ -6,8 +6,8 @@ If you're looking for the official thing, please check the [litmuschaos/litmusct
 
 This repo is mainly for using on my Litmus Chaos terraform provider as the official client imports way too much stuff.
 
-## Depdencies
+## Dependencies
 
-This project depends only on hasura-go-client and it's transient dependencies.
+This project depends only on hasura-go-client, and it's transitive dependencies.
 
 If in the future I'm feeling to... I'll remove it too and to plain graphql queries.
