@@ -2,18 +2,25 @@ package client
 
 import (
 	"bytes"
+	"context"
 	"encoding/json"
 	"errors"
 	"fmt"
 	"io"
 	"net/http"
 	"net/url"
+	"os"
+
+	"github.com/hasura/go-graphql-client"
+	"golang.org/x/oauth2"
 )
 
 type LitmusClient struct {
-	baseUrl     *url.URL
-	httpClient  *http.Client
-	credentials LitmusCredentials
+	baseUrl       *url.URL
+	httpClient    *http.Client
+	graphqlClient *graphql.Client
+	credentials   LitmusCredentials
+	ctx           context.Context
 }
 
 type LitmusHttpResponse[T any] struct {
@@ -26,8 +33,20 @@ type LitmusCredentials struct {
 	Token    string
 }
 
+func newGraphqlClient(ctx context.Context, host string, token string) *graphql.Client {
+	tokenSource := oauth2.StaticTokenSource(&oauth2.Token{AccessToken: token})
+	oauth2HttpClient := oauth2.NewClient(ctx, tokenSource)
+	graphqlPath := os.Getenv("LITMUS_CHAOS_GRAPHQL_PATH")
+	if graphqlPath == "" {
+		graphqlPath = "/api/query"
+	}
+	// This concatenation is incredibly prone to error 😅
+	return graphql.NewClient(host+graphqlPath, oauth2HttpClient)
+}
+
 // Deprecated: this function will be removed in the future. Please use NewClientFromCredentials instead
 func NewLitmusClient(host string, token string) (*LitmusClient, error) {
+	ctx := context.Background()
 	baseUrl, err := url.Parse(host)
 	if err != nil {
 		return nil, fmt.Errorf("failed to parse base url: %v", err)
@@ -44,6 +63,8 @@ func NewLitmusClient(host string, token string) (*LitmusClient, error) {
 				token:   token,
 			},
 		},
+		graphqlClient: newGraphqlClient(ctx, host, token),
+		ctx:           ctx,
 	}
 
 	return client, nil
