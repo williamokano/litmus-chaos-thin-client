@@ -23,7 +23,9 @@ func main() {
 	flag.StringVar(&input.token, "token", "", "Token")
 	flag.Parse()
 
-	litmusClient, err := client.NewLitmusClient(input.host, input.token)
+	litmusClient, err := client.NewClientFromCredentials(input.host, client.LitmusCredentials{
+		Token: input.token,
+	})
 	if err != nil {
 		panic(err)
 	}
