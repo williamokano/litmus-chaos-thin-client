@@ -80,13 +80,9 @@ type CreateEnvironmentMutation struct {
 }
 
 type UpdateEnvironmentMutation struct {
-	UpdateEnvironment struct {
-		string
-	} `graphql:"updateEnvironment(projectID: $projectID, request: $request)"`
+	UpdateEnvironment string `graphql:"updateEnvironment(projectID: $projectID, request: $request)"`
 }
 
 type DeleteEnvironmentMutation struct {
-	DeleteEnvironment struct {
-		string
-	} `graphql:"deleteEnvironment(projectID: $projectID, environmentID: $environmentID)"`
+	DeleteEnvironment string `graphql:"deleteEnvironment(projectID: $projectID, environmentID: $environmentID)"`
 }
